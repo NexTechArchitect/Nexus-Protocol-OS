@@ -9,7 +9,6 @@ import {PerpsVault} from "../../src/core/PerpsVault.sol";
 import {PriceOracle} from "../../src/oracles/PriceOracle.sol";
 import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import {IPerpsCore} from "../../src/interfaces/IPerpsCore.sol";
-// ADDED: SafeERC20 to suppress unchecked transfer warnings
 import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
 // ==========================================

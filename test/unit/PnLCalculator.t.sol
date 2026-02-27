@@ -45,7 +45,7 @@ contract PnLCalculatorTest is Test {
             isLong: true,
             isOpen: true,
             isCrossChain: false,
-            mode: IPerpsCore.MarginMode.ISOLATED // FIX: Added 7th argument
+            mode: IPerpsCore.MarginMode.ISOLATED 
         });
 
         // casting to 'int256' is safe because [explain why]
@@ -65,7 +65,7 @@ contract PnLCalculatorTest is Test {
             isLong: false,
             isOpen: true,
             isCrossChain: false,
-            mode: IPerpsCore.MarginMode.ISOLATED // FIX: Added 7th argument
+            mode: IPerpsCore.MarginMode.ISOLATED 
         });
 
         // casting to 'int256' is safe because [explain why]
@@ -106,31 +106,28 @@ contract PnLCalculatorTest is Test {
         IPerpsCore.Position memory pos = IPerpsCore.Position({
             collateral: 1000 * PRECISION,
             leverage: 10 * PRECISION,
-            entryPrice: 0, // Malicious/Glitched Entry
+            entryPrice: 0, 
             isLong: true,
             isOpen: true,
             isCrossChain: false,
-            mode: IPerpsCore.MarginMode.ISOLATED // FIX: Added 7th argument
+            mode: IPerpsCore.MarginMode.ISOLATED 
         });
 
-        // Expect custom InvalidPrice error before division by zero happens
         vm.expectRevert(PerpsErrors.InvalidPrice.selector); 
         pnlWrapper.calculatePnL(pos, 2000 * PRECISION);
     }
 
     function test_RevertWhen_IntermediateMultiplicationOverflow() public {
-        // Fix: Limit collateral so `collateral * leverage` doesn't panic natively.
-        // We want the panic to happen during `size * priceDelta`.
         uint256 safeMaxCollateral = type(uint256).max / PRECISION;
 
         IPerpsCore.Position memory pos = IPerpsCore.Position({
-            collateral: safeMaxCollateral, // Ensures 1st step is safe
+            collateral: safeMaxCollateral, 
             leverage: 1 * PRECISION,
             entryPrice: 1 * PRECISION,
             isLong: true,
             isOpen: true,
             isCrossChain: false,
-            mode: IPerpsCore.MarginMode.ISOLATED // FIX: Added 7th argument
+            mode: IPerpsCore.MarginMode.ISOLATED 
         });
 
         // Current price is $3. priceDelta = $2 (2 * 1e18).
@@ -142,8 +139,6 @@ contract PnLCalculatorTest is Test {
     }
 
     function test_RevertWhen_FinalPnLOverFlowsInt256() public {
-        // Fix: Keep collateral small enough so `collateral * leverage` doesn't native overflow.
-        // We will make the `priceDelta` massive instead to trigger the int256 overflow.
         
         IPerpsCore.Position memory pos = IPerpsCore.Position({
             collateral: 1000 * PRECISION, 
@@ -152,15 +147,11 @@ contract PnLCalculatorTest is Test {
             isLong: true,
             isOpen: true,
             isCrossChain: false,
-            mode: IPerpsCore.MarginMode.ISOLATED // FIX: Added 7th argument
+            mode: IPerpsCore.MarginMode.ISOLATED 
         });
 
-        // We want (priceDelta * size) / entryPrice to be > int256.max
-        // So priceDelta * 10,000 > int256.max
-        // priceDelta > int256.max / 10,000
         uint256 maxInt = uint256(type(int256).max);
         
-        // This price delta will guarantee the final result is slightly larger than int256.max
         uint256 currentPrice = (maxInt / 10000) + 2; 
 
         vm.expectRevert(PerpsErrors.InvalidAmount.selector);

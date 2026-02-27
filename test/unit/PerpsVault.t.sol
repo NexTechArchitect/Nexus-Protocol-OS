@@ -66,7 +66,7 @@ contract PerpsVaultTest is Test {
     }
 
     // ==========================================
-    // ATTACK 1 FIX: HAIRCUT MITIGATION
+    // ATTACK 1  HAIRCUT MITIGATION
     // ==========================================
 
     function test_Attack_LpEscapesAndLocksTraderProfit() public {
@@ -91,7 +91,7 @@ contract PerpsVaultTest is Test {
         vault.removeLiquidity(lpShares); 
         vm.stopPrank();
 
-        // STEP 4: The Trader's transaction executes...
+        // STEP 4: The Trader's transaction executes
         // We track EXACTLY how much physical USDC is in the vault before settlement
         uint256 vaultPhysicalBalance = usdc.balanceOf(address(vault));
         uint256 expectedClampedPayout = vaultPhysicalBalance * DECIMALS_SCALAR;
@@ -110,7 +110,7 @@ contract PerpsVaultTest is Test {
     }
 
     // ==========================================
-    // ATTACK 2 FIX: DUST SWEEPING
+    // ATTACK 2  DUST SWEEPING
     // ==========================================
 
     function test_Bug_WithdrawalDustSweeping() public {
