@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useAccount, useDisconnect } from 'wagmi';
 import { useNexusAccount, LoginStep } from '@/hooks/useNexusAccount';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
@@ -34,6 +35,7 @@ const CSS = `
   @keyframes av-spin  { to{transform:rotate(360deg)} }
   @keyframes av-shim  { 0%{transform:translateX(-100%)} 100%{transform:translateX(220%)} }
   @keyframes av-pop   { 0%{transform:scale(.95);opacity:0} 100%{transform:scale(1);opacity:1} }
+  @keyframes av-copied { 0%{opacity:0;transform:translateY(4px)} 15%{opacity:1;transform:translateY(0)} 85%{opacity:1;transform:translateY(0)} 100%{opacity:0;transform:translateY(-4px)} }
 `;
 
 // ─── Micro components ─────────────────────────────────────────────────────────
@@ -86,6 +88,115 @@ const S = {
   p: { fontSize:10, fontWeight:500, color:'#94a3b8', lineHeight:1.45, margin:'2px 0 0' } as React.CSSProperties,
 };
 
+// ─── Address Row Component ────────────────────────────────────────────────────
+const AddressRow = ({ address }: { address: string }) => {
+  const [copied, setCopied] = useState(false);
+
+  const short = `${address.slice(0, 6)}…${address.slice(-4)}`;
+
+  const copy = useCallback(async () => {
+    try {
+      await navigator.clipboard.writeText(address);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1800);
+    } catch {
+      // fallback for older browsers
+      const el = document.createElement('textarea');
+      el.value = address;
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand('copy');
+      document.body.removeChild(el);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1800);
+    }
+  }, [address]);
+
+  return (
+    <button
+      onClick={copy}
+      title="Copy address"
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: 6,
+        padding: '6px 10px',
+        borderRadius: 10,
+        border: '1px solid rgba(0,0,0,.07)',
+        background: 'rgba(0,0,0,.025)',
+        cursor: 'pointer',
+        transition: 'all .15s',
+        width: '100%',
+        position: 'relative',
+        overflow: 'hidden',
+      }}
+      onMouseEnter={e => {
+        (e.currentTarget as HTMLButtonElement).style.background = 'rgba(240,185,11,.06)';
+        (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(240,185,11,.25)';
+      }}
+      onMouseLeave={e => {
+        (e.currentTarget as HTMLButtonElement).style.background = 'rgba(0,0,0,.025)';
+        (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(0,0,0,.07)';
+      }}
+    >
+      {/* Wallet dot */}
+      <span style={{
+        width: 8, height: 8, borderRadius: '50%',
+        background: 'linear-gradient(135deg,#F0B90B,#f59e0b)',
+        flexShrink: 0,
+        boxShadow: '0 0 0 2px rgba(240,185,11,.18)',
+      }} />
+
+      {/* Address */}
+      <span style={{
+        fontFamily: 'monospace',
+        fontSize: 11,
+        fontWeight: 700,
+        color: '#334155',
+        letterSpacing: '.02em',
+        flex: 1,
+        textAlign: 'left',
+      }}>
+        {short}
+      </span>
+
+      {/* Copy icon / tick */}
+      {copied ? (
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none"
+          stroke="#22c55e" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
+          style={{ flexShrink: 0, animation: 'av-pop .2s ease both' }}>
+          <path d="M5 13l4 4L19 7"/>
+        </svg>
+      ) : (
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none"
+          stroke="#94a3b8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+          style={{ flexShrink: 0 }}>
+          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+          <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+        </svg>
+      )}
+
+      {/* Copied toast */}
+      {copied && (
+        <span style={{
+          position: 'absolute',
+          right: 8,
+          top: '50%',
+          transform: 'translateY(-50%)',
+          fontSize: 9,
+          fontWeight: 800,
+          color: '#16a34a',
+          letterSpacing: '.1em',
+          pointerEvents: 'none',
+          animation: 'av-copied 1.8s ease forwards',
+        }}>
+          COPIED
+        </span>
+      )}
+    </button>
+  );
+};
+
 // ─────────────────────────────────────────────────────────────────────────────
 export const AccountVerification: React.FC = () => {
   const {
@@ -94,13 +205,28 @@ export const AccountVerification: React.FC = () => {
     verifyAndLogin, logout, handleNetworkSwitch,
   } = useNexusAccount();
 
-  const [hover, setHover] = useState(false);
-  const [, tick]          = useState(0);
+  // Get raw wallet address + wagmi disconnect
+  const { address } = useAccount();
+  const { disconnect } = useDisconnect();
+
+  const [hover, setHover]           = useState(false);
+  const [disconnecting, setDisconn] = useState(false);
+  const [, tick]                    = useState(0);
 
   useEffect(() => {
     const id = setInterval(() => tick(t => t + 1), 60_000);
     return () => clearInterval(id);
   }, []);
+
+  // Full disconnect: clear session + wagmi disconnect
+  const handleDisconnect = useCallback(async () => {
+    setDisconn(true);
+    try {
+      await logout();       // clears nexus session / jwt
+    } catch { /* ignore */ }
+    disconnect();           // wagmi: clears connector state
+    setDisconn(false);
+  }, [logout, disconnect]);
 
   if (!isConnected) return null;
 
@@ -156,22 +282,14 @@ export const AccountVerification: React.FC = () => {
                 <path d="M5 13l4 4L19 7"/>
               </svg>
             </div>
-            <div style={{ flex:1 }}>
+            <div style={{ flex:1, minWidth:0 }}>
               <p style={S.h}>Session Active</p>
               <p style={S.p}>Expires in <Timer h={sessionHoursLeft} m={sessionMinsLeft} /></p>
             </div>
-            <button onClick={logout} style={{
-              fontSize:9, fontWeight:800, letterSpacing:'.14em', textTransform:'uppercase',
-              padding:'4px 10px', borderRadius:8, cursor:'pointer',
-              border:'1px solid rgba(0,0,0,.08)', background:'rgba(0,0,0,.03)',
-              color:'#94a3b8', transition:'color .12s',
-            }}
-              onMouseEnter={e=>{(e.currentTarget as HTMLButtonElement).style.color='#ef4444'}}
-              onMouseLeave={e=>{(e.currentTarget as HTMLButtonElement).style.color='#94a3b8'}}
-            >
-              Exit
-            </button>
           </div>
+
+          {/* Address copy row */}
+          {address && <AddressRow address={address} />}
 
           {/* Thin divider */}
           <div style={{ height:1, background:'rgba(34,197,94,.1)' }} />
@@ -189,6 +307,53 @@ export const AccountVerification: React.FC = () => {
               </span>
             ))}
           </div>
+
+          {/* Disconnect button */}
+          <button
+            onClick={handleDisconnect}
+            disabled={disconnecting}
+            style={{
+              width: '100%',
+              padding: '9px',
+              borderRadius: 11,
+              border: '1px solid rgba(239,68,68,.18)',
+              background: disconnecting ? 'rgba(239,68,68,.04)' : 'rgba(239,68,68,.05)',
+              color: '#ef4444',
+              fontWeight: 800,
+              fontSize: 11,
+              letterSpacing: '.08em',
+              textTransform: 'uppercase',
+              cursor: disconnecting ? 'default' : 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: 6,
+              transition: 'all .15s',
+              opacity: disconnecting ? .6 : 1,
+            }}
+            onMouseEnter={e => {
+              if (!disconnecting) {
+                (e.currentTarget as HTMLButtonElement).style.background = 'rgba(239,68,68,.1)';
+                (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(239,68,68,.35)';
+              }
+            }}
+            onMouseLeave={e => {
+              (e.currentTarget as HTMLButtonElement).style.background = 'rgba(239,68,68,.05)';
+              (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(239,68,68,.18)';
+            }}
+          >
+            {disconnecting ? (
+              <Spinner c="#ef4444" />
+            ) : (
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/>
+                <polyline points="16 17 21 12 16 7"/>
+                <line x1="21" y1="12" x2="9" y2="12"/>
+              </svg>
+            )}
+            {disconnecting ? 'Disconnecting…' : 'Disconnect Wallet'}
+          </button>
 
         </div>
       </div>
