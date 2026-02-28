@@ -58,7 +58,6 @@ export function useNexusAccount() {
 
       const saved: NexusSession = JSON.parse(raw);
 
-      // Must match current wallet AND not be expired
       if (
         saved.ownerAddress.toLowerCase() === ownerAddress.toLowerCase() &&
         saved.expiresAt > Date.now()
@@ -212,7 +211,7 @@ export function useNexusAccount() {
     setErrorMsg(null);
   }, []);
 
-  // ── Session time remaining (for UI countdown) ──
+  // ── Session time remaining 
   const sessionTimeRemaining = session
     ? Math.max(0, session.expiresAt - Date.now())
     : 0;

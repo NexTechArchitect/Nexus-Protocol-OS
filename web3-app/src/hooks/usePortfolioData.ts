@@ -12,8 +12,7 @@ const ASSETS = [
   { symbol: 'ETH', label: 'ETH-USD', address: '0xfFf9976782d46CC05630D1f6eBAb18b2324d6B14' as `0x${string}`, icon: 'Ξ', color: '#627EEA' },
 ] as const;
 
-// ── Decimal helpers ───────────────────────────────────────────────────────────
-// traderCollateral / lockedCollateral stored as 18-dec in vault
+// ── Decimal helpers ─────────────────────
 const fmt18 = (v: bigint | undefined) => {
   if (!v) return '0.00';
   return Number(formatUnits(v, 18)).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -24,8 +23,6 @@ const fmt6 = (v: bigint | undefined) => {
   return Number(formatUnits(v, 6)).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 };
 
-// After the decimal fix, pos.collateral is 18-dec for new positions.
-// Old positions (pre-fix) stored 6-dec. Threshold: >= 1e15 → 18-dec.
 const decodeCollateral = (raw: bigint): number => {
   if (raw === BigInt(0)) return 0;
   if (raw >= BigInt('1000000000000000')) return Number(formatUnits(raw, 18));
@@ -38,7 +35,6 @@ const decodeLeverage = (raw: bigint): number => {
   return Number(raw);
 };
 
-// PnL: collateral & entryPrice both 18-dec, currentPrice 18-dec
 const calcPnL = (
   isLong: boolean,
   entryPrice: bigint,
@@ -64,7 +60,7 @@ const calcPnL = (
     value: Math.abs(pnl).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
     isPositive: pnl >= 0,
     percent: Math.abs(pct).toFixed(2),
-    raw: BigInt(Math.round(pnl * 1e6)), // 6-dec for display only
+    raw: BigInt(Math.round(pnl * 1e6)), 
   };
 };
 

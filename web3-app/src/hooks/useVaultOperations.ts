@@ -116,7 +116,6 @@ export function useVaultOperations(
       onNotification?.('Removing Liquidity', 'Burning HLV shares...', 'loading', removeLiqHash);
   }, [isApproveConfirming, isAddLiqConfirming, isRemoveLiqConfirming]);
 
-  // ── KEY FIX: Auto-fire addLiquidity once approval is confirmed on-chain ───
   useEffect(() => {
     if (!isApproveConfirmed) return;
 

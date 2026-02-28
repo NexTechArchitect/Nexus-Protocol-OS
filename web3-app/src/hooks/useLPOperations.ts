@@ -72,7 +72,6 @@ export function useLPOperations(
     'IDLE' | 'APPROVING' | 'DEPOSITING' | 'WITHDRAWING' | 'SUCCESS'
   >('IDLE');
 
-  // Store amount so we can auto-fire addLiquidity after approval is mined
   const pendingAmountRef = useRef<bigint | null>(null);
 
   // ── Write hooks ──────────────────────────────────────────────────────────
@@ -97,7 +96,6 @@ export function useLPOperations(
   const currentAllowance = (allowanceData as bigint) ?? BigInt(0);
   const currentHash = approveHash ?? addLiqHash ?? removeLiqHash;
 
-  // ── KEY FIX: Once approval tx is mined → auto-fire addLiquidity ──────────
   useEffect(() => {
     if (!isApproveConfirmed) return;
 

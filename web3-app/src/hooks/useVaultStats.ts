@@ -32,8 +32,6 @@ export function useVaultStats() {
 
   // --- CALCULATIONS ---
   
-  // Share Price = Total Liquidity / Total Shares
-  // Both are 18 decimals in the contract (Vault scales USDC to 18 decimals internally)
   let sharePrice = 1.0;
   if (totalShares > BigInt(0)) {
     const liqFloat = parseFloat(formatUnits(totalLiquidity, 18));
@@ -55,13 +53,11 @@ export function useVaultStats() {
       walletUSDC,
     },
     formatted: {
-      // TVL is stored as 18 decimals in contract, convert to standard readable format
       tvl: Number(formatUnits(totalLiquidity, 18)).toLocaleString('en-US', { style: 'currency', currency: 'USD' }),
       
       userShares: Number(formatUnits(userShares, 18)).toFixed(4),
       userValue: userValue.toLocaleString('en-US', { style: 'currency', currency: 'USD' }),
       
-      // Wallet USDC is 6 decimals
       walletBalance: Number(formatUnits(walletUSDC, 6)).toLocaleString('en-US', { minimumFractionDigits: 2 }),
       
       sharePrice: sharePrice.toFixed(4),
