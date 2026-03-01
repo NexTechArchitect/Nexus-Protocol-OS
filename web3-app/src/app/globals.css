@@ -39,7 +39,6 @@ body {
   mix-blend-mode: multiply;
 }
 
-/* Blob 1: Soft Teal/Cyan Light */
 .blob-1 {
   top: -20%; left: -20%;
   width: 70vw; height: 70vw;
