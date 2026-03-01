@@ -23,7 +23,6 @@ body {
   min-height: 100vh;
 }
 
-/* --- NEW: Ultra-Premium Aurora Background --- */
 .aurora-container {
   position: fixed;
   inset: 0;
