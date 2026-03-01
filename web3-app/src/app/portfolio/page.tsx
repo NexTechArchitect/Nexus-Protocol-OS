@@ -9,7 +9,7 @@ import { formatUnits, parseAbiItem } from 'viem';
 import { useWriteContract, useWaitForTransactionReceipt, usePublicClient, useAccount } from 'wagmi';
 import { CONTRACTS } from '@/constants/contracts';
 
-// ─── Types ────────────────────────────────────────────────────────────────────
+// ─── Types ─────────────────────────────────────────────
 interface HistoryItem {
   hash: string;
   type: 'TRADE_OPEN' | 'TRADE_CLOSE' | 'DEPOSIT' | 'WITHDRAW' | 'LIQUIDATED';
