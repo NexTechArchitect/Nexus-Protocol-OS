@@ -4,7 +4,6 @@
 
 # On-Chain Perpetuals Infrastructure
 ### Ethereum Sepolia · Non-Custodial · Zero Gas
-
 <br>
 
 [![License](https://img.shields.io/badge/License-MIT-22c55e?style=flat-square)](https://opensource.org/licenses/MIT)
