@@ -423,6 +423,6 @@ Nexus Perps runs exclusively on **Ethereum Sepolia**. All USDC is Circle testnet
 [![Twitter](https://img.shields.io/badge/𝕏-@itZ__AmiT0-000000?style=flat-square&logo=x)](https://x.com/itZ_AmiT0)
 [![GitHub](https://img.shields.io/badge/GitHub-NexTechArchitect-181717?style=flat-square&logo=github)](https://github.com/NexTechArchitect)
 
-*Senior Smart Contract Developer · Solidity · Foundry · Full Stack Web3*
+*Smart Contract Developer · Solidity · Foundry · Full Stack Web3*
 
 </div>
