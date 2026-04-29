@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://img.shields.io/badge/⚡-Nexus-Protocol-OS-F0B90B?style=for-the-badge&labelColor=0f172a&color=F0B90B" height="36"/>
+<img src="https://img.shields.io/badge/⚡-Nexus_Protocol_OS-F0B90B?style=for-the-badge&labelColor=0f172a&color=F0B90B" height="36"/>
 
 # On-Chain Perpetuals Infrastructure
 ### Ethereum Sepolia · Non-Custodial · Zero Gas
