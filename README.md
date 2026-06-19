@@ -406,13 +406,12 @@ npm run dev
 | Keeper reward rug pull | `rescueTokens()` explicitly blocks `PROTOCOL_ASSET` from owner withdrawal |
 | Implementation contract initialization | `_disableInitializers()` in `SmartAccount` constructor |
 
-> ⚠️ **No formal external security audit has been conducted.** Deployed on Sepolia testnet with testnet assets only. Do not use with real funds.
 
 ---
 
 ## ⚠️ Testnet Disclaimer
 
-Nexus Perps runs exclusively on **Ethereum Sepolia**. All USDC is Circle testnet USDC with zero real-world value. Faucet at [faucet.circle.com](https://faucet.circle.com/) — select **Ethereum Sepolia** only. This is not financial advice.
+Nexus Perps runs exclusively on **Ethereum Sepolia**. All USDC is Circle testnet USDC with zero real-world value. Faucet at [faucet.circle.com](https://faucet.circle.com/) — select **Ethereum Sepolia** only.
 
 ---
 
@@ -420,8 +419,6 @@ Nexus Perps runs exclusively on **Ethereum Sepolia**. All USDC is Circle testnet
 
 **Built with ⚡ by [NexTech Architect](https://github.com/NexTechArchitect)**
 
-[![Twitter](https://img.shields.io/badge/𝕏-@itZ__AmiT0-000000?style=flat-square&logo=x)](https://x.com/itZ_AmiT0)
-[![GitHub](https://img.shields.io/badge/GitHub-NexTechArchitect-181717?style=flat-square&logo=github)](https://github.com/NexTechArchitect)
 
 *Smart Contract Developer · Solidity · Foundry · Full Stack Web3*
 
