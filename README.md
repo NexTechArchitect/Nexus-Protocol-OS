@@ -409,12 +409,6 @@ npm run dev
 
 ---
 
-## ⚠️ Testnet Disclaimer
-
-Nexus Perps runs exclusively on **Ethereum Sepolia**. All USDC is Circle testnet USDC with zero real-world value. Faucet at [faucet.circle.com](https://faucet.circle.com/) — select **Ethereum Sepolia** only.
-
----
-
 <div align="center">
 
 **Built with ⚡ by [NexTech Architect](https://github.com/NexTechArchitect)**
