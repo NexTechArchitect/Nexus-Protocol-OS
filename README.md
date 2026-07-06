@@ -60,45 +60,7 @@ Most DeFi perp protocols rely on off-chain matching engines, centralized price f
 6. [🛠️ Local Setup](#-local-setup)
 7. [🔐 Security Model](#-security-model)
 
----
 
-## 🏛️ Architecture
-
-Five isolated protocol layers. A failure in cross-chain routing cannot affect vault solvency. The oracle layer is fully stateless with zero write access to core contracts.
-
-```
-┌──────────────────────────────────────────────────────────────────┐
-│                        USER / DAPP                               │
-│         RainbowKit · Wagmi v2 · Viem · Next.js 14 App Router     │
-└───────────────────────────┬──────────────────────────────────────┘
-                            │
-┌───────────────────────────▼──────────────────────────────────────┐
-│                 ACCOUNT ABSTRACTION  (ERC-4337)                  │
-│   SmartAccount.sol ── AccountFactory.sol ── NexusPaymaster.sol   │
-│   Gasless UserOps · EIP-712 signing · CREATE2 deterministic AA   │
-└───────────────────────────┬──────────────────────────────────────┘
-                            │
-┌───────────────────────────▼──────────────────────────────────────┐
-│                      TRADING ENGINE                              │
-│   PositionManager.sol  ·  PnLCalculator.sol  ·  LiquidationEngine│
-│   Market & limit orders · Isolated/Cross margin · Batch keepers  │
-└────────────┬─────────────────────────────────┬───────────────────┘
-             │                                 │
-┌────────────▼────────────┐       ┌────────────▼────────────────── ┐
-│      VAULT LAYER        │       │        ORACLE LAYER             │
-│   PerpsVault.sol        │       │   PriceOracle.sol               │
-│   18-dec precision      │       │   Chainlink BTC/USD + ETH/USD   │
-│   LP share system       │       │   Heartbeat staleness guard     │
-│   settleTrade / PnL     │       │   Normalized to 1e18            │
-└─────────────────────────┘       └─────────────────────────────────┘
-             │
-┌────────────▼────────────────────────────────────────────────────┐
-│                  CROSS-CHAIN LAYER  (CCIP)                       │
-│   CrossChainRouter.sol ── encodes & sends trade requests         │
-│   MessageReceiver.sol  ── decodes, deduplicates nonce, executes  │
-│   Source chain + sender whitelist · try/catch pipeline safety    │
-└─────────────────────────────────────────────────────────────────┘
-```
 
 ### Core Design Invariants
 
