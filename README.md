@@ -368,18 +368,6 @@ cp .env.example .env
 forge script script/deploy/05_FullDeploy.s.sol --rpc-url sepolia --broadcast --verify
 ```
 
-### Frontend
-
-```bash
-cd web3-app
-npm install
-
-cp .env.local.example .env.local
-# NEXT_PUBLIC_ALCHEMY_RPC_URL=https://eth-sepolia.g.alchemy.com/v2/YOUR_KEY
-
-npm run dev
-# → http://localhost:3000
-```
 
 ### Get Testnet USDC
 
