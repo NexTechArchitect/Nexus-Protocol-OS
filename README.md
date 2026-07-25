@@ -214,38 +214,6 @@ Each step renders its own UI: spinner, progress bar, error retry. `page.tsx` (Se
 
 ---
 
-### Testing Methodology
-
-**Unit Tests** — Every function in isolation. Success paths, revert conditions, access control, edge cases (zero amounts, stale prices, unauthorized callers, zero addresses).
-
-**Integration Tests:**
-- `AAFlowIntegrationTest` — Smart account deploy → UserOp validation → batch trade execution → unauthorized block
-- `CrossChainIntegrationFlowTest` — Full CCIP encode → router send → receiver decode → PositionManager execute → invalid asset revert → direct call block
-- `LiquidationFlowIntegrationTest` — Stale price oracle protection, precise math solvency, mixed-state batch resilience
-
-**Fuzz Tests (256 runs each):**
-- `testFuzz_OpenRandomPositions` — random collateral + leverage, validates no panic or unexpected revert
-- `testFuzz_LiquidationMathSolvency` — validates vault never insolvent under any liquidation scenario
-
-**Invariant Tests (128 runs × 50 calls = 6,400 state mutations, 0 reverts):**
-
-```
-╭─────────────────────┬────────────────────┬───────┬─────────┬──────────╮
-│ Contract            │ Selector           │ Calls │ Reverts │ Discards │
-╞═════════════════════╪════════════════════╪═══════╪═════════╪══════════╡
-│ PositionHandler     │ changeOraclePrice  │ 1,541 │       0 │        0 │
-│ PositionHandler     │ createTrader       │ 1,603 │       0 │        1 │
-│ PositionHandler     │ openRandomPosition │ 1,659 │       0 │        0 │
-│ PositionHandler     │ tryLiquidation     │ 1,598 │       0 │        0 │
-╰─────────────────────┴────────────────────┴───────┴─────────┴──────────╯
-```
-
-- `invariant_VaultIsSolvent` — `totalLiquidity ≥ 0` holds across all state mutations
-- `invariant_InternalAccountingConsistent` — sum of all internal balances matches physical `ASSET.balanceOf(vault)`
-- `invariant_MaxActiveAssetsRespected` — no trader ever exceeds `maxActiveAssets`
-
----
-
 ## 🛠️ Local Setup
 
 ### Prerequisites
