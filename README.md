@@ -44,7 +44,7 @@ Most DeFi perp protocols rely on off-chain matching engines, centralized price f
 | Oracle manipulation via thin markets | Chainlink aggregators with per-asset heartbeat staleness guards |
 | Gas costs kill small traders | ERC-4337 smart accounts + NexusPaymaster sponsors 100% of gas |
 | Liquidity fragmented across chains | Chainlink CCIP cross-chain margin relay with nonce replay protection |
-| Custodial bridges introduce counterparty risk | All collateral lives in `PerpsVault.sol` — non-custodial, on-chain |
+| Custodial bridges introduce counterparty risk | All collateral lives in `PerpsVault.sol` - non-custodial, on-chain |
 | LP inflation attacks on first deposit | `MINIMUM_LIQUIDITY = 1000` shares permanently burned on genesis deposit |
 | Dust sweep / precision drain | `scaledAmount % DECIMALS_SCALAR != 0` enforced on every withdrawal |
 
