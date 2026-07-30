@@ -37,7 +37,7 @@
 
 ## 🎯 What Makes Nexus Different
 
-Most DeFi perp protocols rely on off-chain matching engines, centralized price feeds, or custodial bridges. Nexus Perps eliminates every one of these dependencies — every price fetch, every liquidation, every settlement runs entirely on-chain with no external coordination layer.
+Most DeFi perp protocols rely on off-chain matching engines, centralized price feeds, or custodial bridges. Nexus Perps eliminates every one of these dependencies, every price fetch, every liquidation, every settlement runs entirely on-chain with no external coordination layer.
 
 | Problem With Existing Protocols | Nexus Solution |
 |:---|:---|
