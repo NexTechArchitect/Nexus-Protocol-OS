@@ -181,22 +181,6 @@ Packed storage: `verifyingSigner` (20 bytes) + `maxCostLimit` (12 bytes) fits in
 
 ---
 
-## 💻 Frontend Stack
-
-**Next.js 14 App Router** with zero backend dependency for read operations. All contract reads use Wagmi v2 + Viem directly from the browser.
-
-### Technology
-
-| Layer | Technology |
-|:---|:---|
-| Framework | Next.js 14 (TypeScript, App Router) |
-| Blockchain | Wagmi v2 + Viem |
-| Wallet UI | RainbowKit (MetaMask, WalletConnect, Coinbase Wallet) |
-| Queries | TanStack Query v5 |
-| Styling | Tailwind CSS |
-| Fonts | Syne (display) · Space Mono (mono) |
-| RPC | Alchemy primary → PublicNode → Sepolia.org → Infura public (fallback chain) |
-
 ### Smart Account Login Flow
 
 `AccountVerification.tsx` (`'use client'`) drives a 5-step state machine via `useNexusAccount`:
