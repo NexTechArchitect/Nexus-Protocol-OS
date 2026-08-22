@@ -152,7 +152,7 @@ isLiquidatable = equity ≤ maintenanceMargin
 
 Overflow guard inside `unchecked {}`: checks `priceDelta * size <= type(uint256).max` before multiplication. Reverts with `PerpsErrors.InvalidAmount()` on overflow.
 
-#### `SmartAccount.sol` — ERC-4337 Wallet
+#### `SmartAccount.sol` - ERC-4337 Wallet
 
 EIP-1167 clone-compatible, EIP-712 structured signing.
 
@@ -248,7 +248,7 @@ forge script script/deploy/05_FullDeploy.s.sol --rpc-url sepolia --broadcast --v
 | Cross-chain replay | Per-trader nonce map in `MessageReceiver` + `block.chainid` binding in `NexusPaymaster` |
 | Unauthorized cross-chain calls | `onlyCrossChainReceiver` + source chain whitelist + sender whitelist (3 layers) |
 | Over-withdrawal during active position | `lockedCollateral` tracking prevents withdrawing margin from open positions |
-| Paymaster signature forgery | `keccak256(userOpHash, block.chainid, address(this))` — chain + contract bound |
+| Paymaster signature forgery | `keccak256(userOpHash, block.chainid, address(this))` - chain + contract bound |
 | CCIP pipeline blocking | `try/catch` in `_ccipReceive` — failed trades emit `TradeFailed`, never block the pipeline |
 | Keeper reward rug pull | `rescueTokens()` explicitly blocks `PROTOCOL_ASSET` from owner withdrawal |
 | Implementation contract initialization | `_disableInitializers()` in `SmartAccount` constructor |
