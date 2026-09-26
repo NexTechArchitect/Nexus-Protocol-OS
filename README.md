@@ -12,7 +12,7 @@
 [![Oracle](https://img.shields.io/badge/Oracle-Chainlink_Live-375BD2?style=flat-square)](https://chain.link/)
 [![AA](https://img.shields.io/badge/Accounts-ERC--4337_Gasless-F0B90B?style=flat-square)](https://eips.ethereum.org/EIPS/eip-4337)
 
-<br>
+<br>           
 
 > **A fully on-chain perpetuals exchange with zero off-chain dependencies.**  
 > Chainlink price oracles · ERC-4337 gasless smart accounts · CCIP cross-chain margin · 50× leverage.
